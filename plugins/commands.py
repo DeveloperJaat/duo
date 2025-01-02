@@ -178,28 +178,42 @@ async def start(client, message):
             parse_mode=enums.ParseMode.HTML
         )
         return
-    if AUTH_CHANNEL and not await is_req_subscribed(client, message):
+    if FIRST_CHANNEL and SECOND_CHANNEL and not await is_subscribed(client, message):
+        try:
+            invite_link1 = await client.create_chat_invite_link(int(FIRST_CHANNEL))
+            invite_link2 = await client.create_chat_invite_link(int(SECOND_CHANNEL))
+        except ChatAdminRequired:
+            logger.error("Make sure Bot is admin in Forcesub channels")
+            return
+        btn = [
+               [
+                InlineKeyboardButton("Updates channel", url=invite_link1.invite_link),
+                InlineKeyboardButton("Movie channel", url=invite_link2.invite_link),
+               ],
+               [
+                InlineKeyboardButton('🤔 Why I Am Joining? 🤔', callback_data='sinfo')
+               ]
+              ]
+
+        if message.command[1] != "subscribe":
             try:
-                 invite_link = await client.create_chat_invite_link(int(AUTH_CHANNEL))
-            except ChatAdminRequired:
-                 logger.error("Mᴀᴋᴇ sᴜʀᴇ Bᴏᴛ ɪs ᴀᴅᴍɪɴ ɪɴ Fᴏʀᴄᴇsᴜʙ ᴄʜᴀɴɴᴇʟ")
-                 return
-            btn = [[
-                InlineKeyboardButton("join update channel", url=invite_link.invite_link)
-              ]]
-            if message.command[1] != "subscribe":
-                try:
-                    kk, file_id = message.command[1].split("_", 1)
-                    pre = 'checksubp' if kk == 'filep' else 'checksub' 
-                    btn.append([InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
-                except (IndexError, ValueError):
-                    btn.append([InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
-            await client.send_message(
-                chat_id=message.from_user.id,
-                text="**Yᴏᴜ ᴀʀᴇ ɴᴏᴛ ɪɴ ᴏᴜʀ Bᴀᴄᴋ-ᴜᴘ ᴄʜᴀɴɴᴇʟ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ sᴏ ʏᴏᴜ ᴅᴏɴ'ᴛ ɢᴇᴛ ᴛʜᴇ ᴍᴏᴠɪᴇ ғɪʟᴇ, ᴘʟᴇᴀꜱᴇ ᴊᴏɪɴ ᴀɴᴅ ᴍᴏᴠɪᴇ ғɪʟᴇ...✅**",
-                reply_markup=InlineKeyboardMarkup(btn),
-                parse_mode=enums.ParseMode.MARKDOWN
-                )
+                kk, file_id = message.command[1].split("_", 1)
+                btn.append([InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", callback_data=f"checksub#{kk}#{file_id}")])
+            except (IndexError, ValueError):
+                btn.append([InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
+        await client.send_photo(
+            chat_id=message.from_user.id,
+            photo="https://telegra.ph/file/ac5a81226569541b21a23.jpg",
+            caption="**You are not in one of our updates and movie channel, so you won't receive the movie file...\n"
+                    "If you want the movie file, click on the '❤️ Updates Channel' and '❤️ Movie channel' buttons below and join both of our channels,\n"
+                    "then click on the '↻ Try Again' button below...\n"
+                    "Then you will get the movie files...\n\n"
+                    "आप हमारे Updates और movie channel में join नहीं हैं, इसलिए आपको मूवी फ़ाइल नहीं मिल पाएंगी...\n"
+                    "यदि आप मूवी फ़ाइल चाहते हैं, तो नीचे '🍿Updates और Movie ᴄʜᴀɴɴᴇʟ🍿' बटन पर क्लिक करें और हमारे चैनल से जुड़े, फिर नीचे '🔄 Try again' बटन पर क्लिक करें...\n"
+                    "उसके बाद आपको आपकी मूवी फ़ाइलें मिल जाएंगी।।...**",
+            reply_markup=InlineKeyboardMarkup(btn),
+            parse_mode=enums.ParseMode.MARKDOWN
+            )
             return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
