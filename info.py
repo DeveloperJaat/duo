@@ -35,6 +35,14 @@ STREAM_API = (environ.get('STREAM_API', ''))
 STREAMHTO = (environ.get('STREAMHTO', ''))
 BOT_USERNAME = environ.get("BOT_USERNAME", "showtime_file_bot")
 
+#Double Force Sub
+FIRST_CHANNEL = environ.get('FIRST_CHANNEL', '-1002451929016')
+SECOND_CHANNEL = environ.get('SECOND_CHANNEL', '-1002375939713')
+
+
+first_channel = environ.get('FIRST_CHANNEL', '-1002451929016')
+second_channel = environ.get('SECOND_CHANNEL', '-1002375939713')
+
 # Admins, Channels & Users
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '6454955024 6676821961').split()]
 CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '').split()] #Channel id for auto indexing ( make sure bot is admin )
