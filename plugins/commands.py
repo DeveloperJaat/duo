@@ -185,7 +185,7 @@ async def start(client, message):
             except ChatAdminRequired:
                   logger.error("Make sure Bot is admin in Forcesub channels")
                   return
-             btn = [
+                btn = [
                 [
                  InlineKeyboardButton("Updates channel", url=invite_link1.invite_link),
                  InlineKeyboardButton("Movie channel", url=invite_link2.invite_link),
