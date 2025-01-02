@@ -191,7 +191,7 @@ async def start(client, message):
                 InlineKeyboardButton("Movie channel", url=invite_link2.invite_link),
                ],
                [
-                InlineKeyboardButton('🤔 Why I Am Joining? 🤔', callback_data='sinfo')
+                InlineKeyboardButton('🤔 Why I Am Joining? 🤔', callback_data='DFSUB')
                ]
               ]
 
